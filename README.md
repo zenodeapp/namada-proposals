@@ -81,7 +81,7 @@ Options (all are optional):
 
 > [!TIP]
 >
-> Creating cronjob that periodically runs this script - let's say every _epoch_ - would be **the cheat of a lifetime** in this _Shielded Expedition_; *wink*, *wink*.
+> Creating a cronjob that periodically runs this script - let's say every _epoch_ - would be **the cheat of a lifetime** in this _Shielded Expedition_; *wink*, *wink*.
 
 ## V1 (old)
 

@@ -9,7 +9,7 @@ source $REPO_ROOT/dependencies/process_config.sh
 # Options
 OUTPUT_FILE="processed_votes.txt"
 SKIP_EXECUTION=false
-SKIP_PROCESSING=false
+OFFLINE=false
 SHOW_SKIPPED=false
 
 function usage {
@@ -23,8 +23,8 @@ function usage {
     echo "Options (all are optional):"
     echo "  --output-file                Where all the processed votes should be stored (set to: $OUTPUT_FILE)."
     echo "  --skip-execution             Prints information about each proposal without attempting to vote (set to: $SKIP_EXECUTION)."
-    echo "  --skip-processing            Doesn't process new votes and only calculates and prints the percentage for known processed votes [set to: $SKIP_PROCESSING]."
     echo "  --show-skipped               Also shows proposals this utility already processed (set to: $SHOW_SKIPPED)."
+    echo "  --offline                    Doesn't process new votes and only calculates and prints the percentage for known processed votes (set to: $OFFLINE)."
     echo "  -h, --help                   Show this help message."
     exit 0
 }
@@ -39,11 +39,11 @@ while [[ $# -gt 0 ]]; do
         --skip-execution)
             SKIP_EXECUTION=true
             ;;
-        --skip-processing)
-            SKIP_PROCESSING=true
-            ;;
         --show-skipped)
             SHOW_SKIPPED=true
+            ;;
+        --offline)
+            OFFLINE=true
             ;;
         -h | --help)
             usage
@@ -126,8 +126,8 @@ function process_proposals() {
     done
 }
 
-# Skip process if we want a quick calculation of our current (known) voting percentage (uses the output file)
-if $SKIP_PROCESSING; then
+# Skip processing if we want an offline calculation of our governance participation rate (uses the output file)
+if $OFFLINE; then
     voted_proposals=$(wc -l < "$OUTPUT_FILE")
 else
     process_proposals
@@ -148,7 +148,7 @@ fi
 percentage=$(bc <<< "scale=2; ($voted_proposals / $total_proposals) * 100")
 
 # Result
-if ! $SKIP_PROCESSING; then 
+if ! $OFFLINE; then 
   echo ""
 fi
 

@@ -80,3 +80,8 @@ Options (all are optional):
   --offline                    Doesn't process new votes and only calculates and prints the percentage for known processed votes (set to: false).
   -h, --help                   Show this help message.
 ```
+
+</br>
+
+<p align="right">— ZEN</p>
+<p align="right">Copyright (c) 2024 ZENODE</p>

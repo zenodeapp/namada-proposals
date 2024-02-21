@@ -1,21 +1,40 @@
 #!/bin/bash
 
-# Your addresses here (hardcoded to prevent having to add them over and over again)
-voters=("tnam1qq22qmw72m3e6c8lajx8jmzzh2h4t3dp7cfs4dxf" "tnam1qy6sfh87d4uy0d8mcc9gww5h0pctxvf0m5vdgw2c")
-memo=$MEMO
-votes=("abstain" "nay" "yay")
-node=tcp://127.0.0.1:26657
-
-# Default values
+# Options
+CONFIG_FILE="config.json"
 PRINT_ONLY=false
 CALCULATE_PERCENTAGE_ONLY=false
 SHOW_SKIPPED=false
-OUTPUT_FILE="zen_voting_processed.txt"
+OUTPUT_FILE="processed_votes.txt"
+
+# Check if the configuration file exists
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Configuration file $CONFIG_FILE not found."
+    exit 1
+fi
+
+# Check if the JSON is valid
+if ! jq empty "$CONFIG_FILE" > /dev/null 2>&1; then
+    echo "Error: Invalid JSON in $CONFIG_FILE."
+    exit 1
+fi
+
+# Check if required keys are present
+if ! jq -e 'has("node") and has("voters") and has("votes") and has("memo")' "$CONFIG_FILE" > /dev/null 2>&1; then
+    echo "Error: Missing required keys in $CONFIG_FILE."
+    exit 1
+fi
+
+# Parse config.json
+mapfile -t voters < <(jq -r '.voters[]' $CONFIG_FILE)
+mapfile -t votes < <(jq -r '.votes[]' $CONFIG_FILE)
+node=$(jq -r '.node' $CONFIG_FILE)
+memo=$(jq -r '.memo' $CONFIG_FILE)
 
 # Function to display script usage
 function show_help {
     echo "Usage: $0 [options]"
-    echo "Configuration (hardcoded):"
+    echo "Configuration ($CONFIG_FILE):"
     echo "memo      $memo"
     echo "voters    ${voters[*]}"
     echo "options   ${votes[*]}"
@@ -25,7 +44,7 @@ function show_help {
     echo "  --print-only                 Prints information about each proposal without attempting to vote (set to: $PRINT_ONLY)."
     echo "  --calculate-percentage-only  Calculate and print the percentage for all known processed votes (for a quick look at your percentage) [set to: $CALCULATE_PERCENTAGE_ONLY]."
     echo "  --show-skipped               Show which proposals were already processed by this utility (set to: $SHOW_SKIPPED)."
-    echo "  --output-file                Where all the processed votes are being stored (set to: $OUTPUT_FILE)."
+    echo "  --output-file                Where all the processed votes should be stored (set to: $OUTPUT_FILE)."
     echo "  -h, --help                   Show this help message."
     exit 0
 }

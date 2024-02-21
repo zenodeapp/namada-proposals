@@ -1,0 +1,7 @@
+/* Only for zen_voting_v2.sh */
+{
+  "node": "tcp://127.0.0.1:26657",
+  "voters": ["tnam1qq22qmw72m3e6c8lajx8jmzzh2h4t3dp7cfs4dxf", "tnam1qy6sfh87d4uy0d8mcc9gww5h0pctxvf0m5vdgw2c"],
+  "votes": ["yay", "nay", "abstain"],
+  "memo": "tpknam1qz36mzdvdmxvvcpv3c36zzs5v369jauws0tzrxesuaexy0p25r5sy0jsuac"
+}

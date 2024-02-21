@@ -79,6 +79,10 @@ Options (all are optional):
   -h, --help                   Show this help message.
 ```
 
+> [!TIP]
+>
+> Creating cronjob that periodically runs this script - let's say every _epoch_ - would be **the cheat of a lifetime** in this _Shielded Expedition_; *wink*, *wink*.
+
 ## V1 (old)
 
 > [!WARNING]

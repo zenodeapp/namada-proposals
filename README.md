@@ -2,42 +2,43 @@
 
 Automate Namada's proposal voting and monitor your participation rate in governance.
 
-> [!TIP]
->
-> Saving `$NAMADA_WALLET_PASSWORD=your_password` to `~/.bashrc` or `~/.bashprofile` could really make your life easier when you want to automate these proposals. Make sure to source the file afterwards in your terminal (e.g. `source ~/.bashrc`) if you do this.
-
+This has been written by ZENODE and is licensed under the APACHE 2.0-license (see [LICENSE](./LICENSE)).
 
 ## Versions
 
-There are currently two versions. While V2 is superior in most cases, V1 could still have its use. Especially in `TEST` mode, which makes it easy to print out vote commands without necessarily executing them.
+There are currently **two versions**. While V2 is superior in most cases, V1 could still have its use. Especially in `TEST` mode, which makes it easy to print out vote commands without necessarily executing them.
 
-I'll start off by explaining V2, since this is the most verbose and the one I recommend to use.
+> [!TIP]
+>
+> **Tip for both versions**
+> 
+> Saving `$NAMADA_WALLET_PASSWORD=your_password` to _~/.bashrc_ or _~/.bashprofile_ could really make your life easier when you want to automate these proposals. Make sure to source the file afterwards in your terminal (e.g. `source ~/.bashrc`) if you do this.
 
-### V2
+## V2
 
-#### Requirements
+### Requirements
 - Faith and trust that this isn't a Trojan virus.
 - `jq` - install this using `sudo apt-get install jq`.
 
-#### Capabilities
+### Capabilities
 
-- **Keeps track of proposals already voted on** (saves this in a `.txt` file)
-- Shows your **governance participation rate** (either in `--offline`-mode or via a partial-live calculation).
+- Keeps track of proposals already voted on (saves this in a `.txt` file)
+- Shows your governance participation rate (either in `--offline`-mode or via a partial-live calculation).
   > Partial because it uses offline data wherever it can, but also attempts to check the proposals it hasn't processed yet.
   >
   > If you want to recalculate, simply remove the `.txt`-file or point to a different `--output-file`.
-- **Executes `vote-proposal`-commands** for proposals a configured voter(s) has (or have) not yet voted on.
+- Executes `vote-proposal`-commands for proposals a configured voter(s) has (or have) not yet voted on.
 - Parses values like `memo`, `node`, `voters` and `votes` from a `config.json`-file (see [config.json.example](/config.json.example)).
 - Randomizes between `votes` and `voters` values during the execution of a vote; can be adapted in the `config.json`-file.
 
-#### Quick-start
+### Quick-start
 
-**1. Clone**
+#### 1. Clone
 ```
 git clone https://github.com/zenodeapp/namada-proposals && cd namada-proposals
 ```
 
-**2. Configuration**
+#### 2. Configuration
    
 > [!WARNING]
 >
@@ -47,23 +48,20 @@ git clone https://github.com/zenodeapp/namada-proposals && cd namada-proposals
 cp config.json.example config.json
 ```
 
-**3. Run**
+#### 3. Run
+
+> [!IMPORTANT]
+>
+> The first run will always be slower than subsequent ones, since the utility won't have processed any of your proposals _yet_.
 
 ```
 bash zen_voting_v2.sh
 ```
 > Use `bash`; _sh_ won't work!
 
+### More
 
-
-
-#### Usage
-
-> [!IMPORTANT]
->
-> The first run will always be slower than subsequent ones, since the utility won't have processed any of your proposals.
-
-Use `bash zen_voting_v2.sh -h` or `bash zen_voting_v2.sh --help` to access this. It will show which configurations it parsed from the `config.json` file and also a list of _options_ you're able to use.
+For more help see `bash zen_voting_v2.sh -h` or `bash zen_voting_v2.sh --help`. It will at the beginning show which configurations it parsed from the `config.json` file and also a list of _optional options_ you're able to use.
 
 ```
 Usage: zen_voting_v2.sh [options]

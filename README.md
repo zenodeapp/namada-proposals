@@ -35,7 +35,7 @@ There are currently **two versions**. While V2 is superior in most cases, V1 cou
 
 #### 1. Clone
 ```
-git clone https://github.com/zenodeapp/namada-proposals && cd namada-proposals
+git clone https://github.com/zenodeapp/namada-proposals.git && cd namada-proposals
 ```
 
 #### 2. Configuration
@@ -78,6 +78,40 @@ Options (all are optional):
   --offline                    Doesn't process new votes and only calculates and prints the percentage for known processed votes (set to: false).
   -h, --help                   Show this help message.
 ```
+
+## V1 (old)
+
+> [!WARNING]
+>
+> A caveat with this version is that values are hardcoded; you'll have to make the necessary changes at the top of the script. I might change this in the near-future, but is not a priority of mine since V2 already solves this.
+
+### Requirements
+- Faith and trust that this isn't a Trojan virus.
+
+### Capabilities
+
+- Executes `vote-proposal`-commands for a range of proposals (`n1`...`n2`).
+- Allows specifying `specific_proposals`, which are useful if you want to process proposals outside the set range.
+- A `TEST`-mode where every `vote-proposal`-command only gets printed, either to double-check or have a list of commands for later use. 
+- Randomizes between `aliases` and `vote_options` values during the execution of a vote.
+
+### Quick-start
+
+#### 1. Clone
+```
+git clone https://github.com/zenodeapp/namada-proposals.git && cd namada-proposals
+```
+
+#### 2. Configuration
+   
+Make the necessary changes in the script `zen_voting_v1.sh`.
+
+#### 3. Run
+
+```
+bash zen_voting_v1.sh
+```
+> Use `bash`; _sh_ won't work!
 
 </br>
 

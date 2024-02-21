@@ -78,18 +78,59 @@ done
 
 # Fetch the last proposal ID
 total_proposals=$(namada client query-proposal | awk '/Proposal Id:/ {id=$3} END {print id + 1}')
-# Define the voters to search for
 
 # Initialize counters
 proposals_with_votes=0
+executed_proposals=()
 
 # Check if the processed file exists, if not create it
 OUTPUT_DIR=$(dirname "$OUTPUT_FILE")
 mkdir -p "$OUTPUT_DIR" || { echo "Error creating directory: $OUTPUT_DIR"; exit 1; }
 touch "$OUTPUT_FILE"
 
-# Check if the processed file exists
-if ! $CALCULATE_PERCENTAGE_ONLY; then
+function execute_vote() {
+    local proposal_id=$1
+    local address=${voters[RANDOM % ${#voters[@]}]}
+    local vote=${votes[RANDOM % ${#votes[@]}]}
+
+    local command="namada client vote-proposal --memo $memo --vote $vote --address $address --node $node --proposal-id $proposal_id"
+    echo $command
+    eval $command
+}
+
+function process_vote() {
+    local proposal_id=$1
+    local print_only=$2
+
+    # Loop through the voters for the current proposal
+    for ((i=0; i<${#voters[@]}; i++)); do
+        target_voter="${voters[i]}"
+        # Run the command to check if the voter voted for the proposal
+        vote_result=$(namada client query-proposal-votes --proposal-id $proposal_id --voter $target_voter)
+
+        # Check if the vote exists
+        if [[ $vote_result == *"has not voted on proposal $proposal_id"* ]]; then
+            # Check if we are at the last item in voters list
+            if [ $i -eq $((${#voters[@]} - 1)) ]; then
+                echo -e "\e[91m✘ No votes found for proposal $proposal_id by any of the specified voters.\e[0m \e[92m("$proposals_with_votes"/"$total_proposals")\e[0m"
+                if ! $print_only; then
+                    execute_vote $proposal_id
+                    executed_proposals+=("$proposal_id")
+                fi
+            fi
+        elif [ -n "$vote_result" ]; then
+            ((proposals_with_votes++))
+            echo -e "\e[92m✔ Vote found for proposal $proposal_id by voter $target_voter. ("$proposals_with_votes"/"$total_proposals")\e[0m"
+            # Record the processed proposal ID
+            echo ""$proposal_id" "$target_voter"" >> "$OUTPUT_FILE"
+            break  # Exit the inner loop if a vote is found
+        else
+            echo "An error occurred while checking votes for proposal $proposal_id by voter $target_voter."
+        fi
+    done
+}
+
+function process_proposals() {
     # Loop through the range of proposal IDs
     for ((proposal_id=0; proposal_id<$total_proposals; proposal_id++)); do
         # Check if the proposal has been processed
@@ -102,34 +143,25 @@ if ! $CALCULATE_PERCENTAGE_ONLY; then
             continue
         fi
 
-        for ((i=0; i<${#voters[@]}; i++)); do
-            target_voter="${voters[i]}"
-            # Run the command to check if the voter voted for the proposal
-            vote_result=$(namada client query-proposal-votes --proposal-id $proposal_id --voter $target_voter)
-
-            # Check if the vote exists
-            if [[ $vote_result == *"has not voted on proposal $proposal_id"* ]]; then
-                # Check if we are at the last item in voters list
-                if [ $i -eq $((${#voters[@]} - 1)) ]; then
-                    echo -e "\e[91m✘ No votes found for proposal $proposal_id by any of the specified voters. ("$proposals_with_votes"/"$total_proposals")\e[0m"
-                    if ! $PRINT_ONLY; then
-                        # TODO: Attempt to vote
-                        echo "Try to vote"
-                    fi
-                fi
-            elif [ -n "$vote_result" ]; then
-                ((proposals_with_votes++))
-                echo -e "\e[92m✔ Vote found for proposal $proposal_id by voter $target_voter. ("$proposals_with_votes"/"$total_proposals")\e[0m"
-                # Record the processed proposal ID
-                echo ""$proposal_id" "$target_voter"" >> "$OUTPUT_FILE"
-                break  # Exit the inner loop if a vote is found
-            else
-                echo "An error occurred while checking votes for proposal $proposal_id by voter $target_voter."
-            fi
-        done
+        process_vote $proposal_id $PRINT_ONLY
     done
-else
+}
+
+if $CALCULATE_PERCENTAGE_ONLY; then
     proposals_with_votes=$(wc -l < "$OUTPUT_FILE")
+else
+    process_proposals
+fi
+
+# Check if executed proposals array is not empty
+if [ ${#executed_proposals[@]} -ne 0 ]; then
+    echo ""
+    echo -e "\e[93mChecking executed proposals:\e[0m"
+
+    # Iterate over the executed proposals
+    for executed_id in "${executed_proposals[@]}"; do
+        process_vote $executed_id true
+    done
 fi
 
 # Calculate and print the percentage

@@ -58,7 +58,7 @@ done
 
 # Variables
 voted_proposals=0
-total_proposals=$(namada client query-proposal | awk '/Proposal Id:/ {id=$3} END {print id + 1}')
+total_proposals=$(namada client query-proposal --node $node | awk '/Proposal Id:/ {id=$3} END {print id + 1}')
 executed_proposals=()
 
 # Check if the output file exists, if not create it.
@@ -86,7 +86,7 @@ function process_proposal() {
     for ((i=0; i<${#voters[@]}; i++)); do
         voter="${voters[i]}"
         # Run the command to check if the voter voted for the proposal
-        vote_result=$(namada client query-proposal-votes --proposal-id $proposal_id --voter $voter)
+        vote_result=$(namada client query-proposal-votes --proposal-id $proposal_id --voter $voter --node $node)
 
         # If the vote doesn't exist, 
         if [[ $vote_result == *"has not voted on proposal $proposal_id"* ]]; then

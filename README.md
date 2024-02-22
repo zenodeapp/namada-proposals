@@ -19,7 +19,7 @@ There are currently **two versions**. While V2 is superior in most cases, V1 cou
 ### Requirements
 - Faith and trust that this isn't a Trojan virus.
 - `jq` - install this using `sudo apt-get install jq`.
-- [Namada binary installed](https://github.com/anoma/namada)
+- [Namada binary installed](https://github.com/anoma/namada). 
 
 ### Capabilities
 
@@ -92,7 +92,7 @@ Options (all are optional):
 
 ### Requirements
 - Faith and trust that this isn't a Trojan virus.
-- - [Namada binary installed](https://github.com/anoma/namada)
+- - [Namada binary installed](https://github.com/anoma/namada).
 
 ### Capabilities
 

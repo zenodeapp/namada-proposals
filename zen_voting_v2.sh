@@ -153,8 +153,12 @@ if ! $OFFLINE; then
 fi
 
 echo -e "\e[93mResult:\e[0m"
+echo "Memo: $memo."
+echo "Voter(s): ${voters[*]}."
 if (( $(echo "$percentage < 90" | bc -l) )); then
+    echo -e "\e[91mVoted on $voted_proposals out of $total_proposals proposals.\e[0m"
     echo -e "\e[91mPercentage of processed proposals (with valid votes): $percentage%\e[0m"
 else
+    echo -e "\e[92mVoted on $voted_proposals out of $total_proposals proposals.\e[0m"
     echo -e "\e[92mPercentage of processed proposals (with valid votes): $percentage%\e[0m"
 fi

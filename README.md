@@ -12,7 +12,7 @@ There are currently **two versions**. While V2 is superior in most cases, V1 cou
 >
 > **Tip for both versions**
 > 
-> Saving `$NAMADA_WALLET_PASSWORD=your_password` to _~/.bashrc_ or _~/.bashprofile_ could really make your life easier when you want to automate these proposals. Make sure to source the file afterwards in your terminal (e.g. `source ~/.bashrc`) if you do this.
+> Saving `$NAMADA_WALLET_PASSWORD=your_password` to _~/.bashrc_ or _~/.bashprofile_ could really make your life easier when you want to automate these proposals. Make sure to source the file afterwards in your terminal (e.g. `source ~/.bashrc`).
 
 ## V2
 
@@ -42,7 +42,7 @@ git clone https://github.com/zenodeapp/namada-proposals.git && cd namada-proposa
    
 > [!WARNING]
 >
-> Make sure you change the configurations!
+> Make sure to change the configurations!
 
 ```
 cp config.json.example config.json
@@ -61,7 +61,7 @@ bash zen_voting_v2.sh
 
 ### More
 
-For more help see `bash zen_voting_v2.sh -h` or `bash zen_voting_v2.sh --help`. It will at the beginning show which configurations it parsed from the `config.json` file and also a list of _optional options_ you're able to use.
+For more help see `bash zen_voting_v2.sh -h` or `bash zen_voting_v2.sh --help`. It will show which configurations it parsed from the `config.json` file and also a list of _optional options_ you're able to use.
 
 ```
 Usage: zen_voting_v2.sh [options]

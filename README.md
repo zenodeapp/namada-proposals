@@ -75,7 +75,7 @@ node      tcp://127.0.0.1:26657
 Options (all are optional):
   --output-file                Where all the processed votes should be stored (set to: processed_votes.txt).
   --skip-execution             Prints information about each proposal without attempting to vote (set to: false).
-  --show-skipped               Also shows proposals this utility already processed (set to: false).
+  --show-skipped               Show proposals this utility already processed (set to: false).
   --offline                    Doesn't process new votes and only calculates and prints the percentage for known processed votes (set to: false).
   -h, --help                   Show this help message.
 ```

@@ -23,7 +23,7 @@ function usage {
     echo "Options (all are optional):"
     echo "  --output-file                Where all the processed votes should be stored (set to: $OUTPUT_FILE)."
     echo "  --skip-execution             Prints information about each proposal without attempting to vote (set to: $SKIP_EXECUTION)."
-    echo "  --show-skipped               Also shows proposals this utility already processed (set to: $SHOW_SKIPPED)."
+    echo "  --show-skipped               Show proposals this utility already processed (set to: $SHOW_SKIPPED)."
     echo "  --offline                    Doesn't process new votes and only calculates and prints the percentage for known processed votes (set to: $OFFLINE)."
     echo "  -h, --help                   Show this help message."
     exit 0
